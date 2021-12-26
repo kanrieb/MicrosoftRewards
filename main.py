@@ -33,7 +33,7 @@ if __name__ == '__main__':
 
     # go to the Microsoft login page and log in
     driver = webdriver.Firefox(options=firefox_options,
-                               executable_path='/Users/kathrynrieb/Projects/MicrosoftRewards/node_modules/geckodriver/geckodriver', firefox_profile=profile)
+                               executable_path='node_modules/geckodriver/geckodriver', firefox_profile=profile)
 
     driver.get("https://login.live.com/")
 
