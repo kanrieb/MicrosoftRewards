@@ -14,15 +14,15 @@ from random import randint
 import sys
 
 if __name__ == '__main__':
-    search_iterations = 31
+    search_iterations = 30
 
     firefox_options = Options()
     firefox_options.add_argument("--headless")
 
     # Mobile
     profile = webdriver.FirefoxProfile()
-    if(sys.argv[0] == "--mobile"):
-        search_iterations = 21
+    if(len(sys.argv) > 1 and sys.argv[1] == "--mobile"):
+        search_iterations = 20
         profile.set_preference(
             "general.useragent.override", "Mozilla/5.0 (Linux; U; Android 4.4.2; en-us; SCH-I535 Build/KOT49H) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30")
 
@@ -40,7 +40,7 @@ if __name__ == '__main__':
     try:
         # Input user name
         w = WebDriverWait(driver, 10)
-        time.sleep(3)
+        time.sleep(1)
         # Wait for username input to load
         w.until(expected_conditions.presence_of_element_located(
             (By.ID, 'i0116')))
@@ -50,7 +50,7 @@ if __name__ == '__main__':
         driver.find_element(By.ID, "idSIButton9").click()
 
         # Input password
-        time.sleep(3)
+        time.sleep(2)
         w.until(expected_conditions.presence_of_element_located(
             (By.ID, 'i0118')))
         driver.find_element(By.ID, "i0118").send_keys(parseLogin["password"])
@@ -59,18 +59,23 @@ if __name__ == '__main__':
         driver.find_element(By.ID, 'idSIButton9').click()
 
         # Stay signed in
-        time.sleep(3)
+        time.sleep(1)
         w.until(expected_conditions.presence_of_element_located(
             (By.ID, 'idSIButton9')))
         driver.find_element(By.ID, 'idSIButton9').click()
-        # driver.find_element(By.CLASS_NAME, 'idSIButton9').send_keys(Keys.ENTER)
 
-        # Buffer time to sign in
-        time.sleep(3)
+        # Have an initial search, then press the 'Sign in' button (sometimes has to be retriggered)
+        time.sleep(1)
+        driver.get("https://www.bing.com/search?q=test")
+        time.sleep(2)
 
-        driver.get("https://www.bing.com/search?q=porque")
-        time.sleep(5)
-        driver.get("https://www.bing.com/search?q=round")
+        if(len(sys.argv) > 1 and sys.argv[1] == '--mobile'):
+            # Trigger hamburger menu signin for mobile
+            driver.find_element_by_id('mHamburger').click()
+            driver.find_element_by_id('HBSignIn').click()
+        else:
+            driver.find_element_by_class_name('id_button').click()
+        time.sleep(1)
 
         # Run a loop of queries
         start = randint(0, 965)
