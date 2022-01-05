@@ -71,8 +71,9 @@ if __name__ == '__main__':
 
         if(len(sys.argv) > 1 and sys.argv[1] == '--mobile'):
             # Trigger hamburger menu signin for mobile
-            driver.find_element_by_id('mHamburger').click()
-            driver.find_element_by_id('HBSignIn').click()
+            driver.find_element(By.ID, 'mHamburger').click()
+            time.sleep(1)
+            driver.find_element(By.ID, 'HBSignIn').click()
         else:
             driver.find_element_by_class_name('id_button').click()
         time.sleep(1)
